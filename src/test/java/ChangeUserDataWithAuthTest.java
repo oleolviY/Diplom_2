@@ -5,39 +5,55 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import steps.UserSteps;
+
+import static config.Constants.TOKEN;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.hamcrest.Matchers.equalTo;
 
-public class ChangeUserDataWithAutthTest {
-    private String email;
-    private String name;
-    private String password;
+public class ChangeUserDataWithAuthTest extends AbstractTest {
     private UserSteps userSteps = new UserSteps();
     private User user;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         user = new User();
-        userSteps.createUser(user);
+        user.setName(org.apache.commons.lang3.RandomStringUtils.randomAlphabetic(10));
+        user.setPassword(org.apache.commons.lang3.RandomStringUtils.randomAlphabetic(10));
+        user.setEmail(org.apache.commons.lang3.RandomStringUtils.randomAlphabetic(10) + "@yandex.ru");
     }
 
     @Test
     @DisplayName("Изменение почты пользователя с авторизацией")
-    public void ChangeUserEmail(){
-        String newEmail = (RandomStringUtils.randomAlphabetic(10) + "@yandex.ru").toLowerCase();
-        user.setEmail(newEmail);
+    public void ChangeUserEmail() {
         userSteps
-                .changeUserData(user)
+                .createUser(user);
+        String newEmail = (RandomStringUtils.randomAlphabetic(10) + "@yandex.ru").toLowerCase();
+        userSteps
+                .changeUserEmail(user, newEmail)
                 .assertThat()
                 .statusCode(SC_OK)
                 .and()
                 .body("user.email", equalTo(newEmail));
     }
 
+    @Test
+    @DisplayName("Изменение имени пользователя с авторизацией")
+    public void ChangeUserName() {
+        userSteps
+                .createUser(user);
+        String newName = RandomStringUtils.randomAlphabetic(10);
+        userSteps
+                .changeUserName(user, newName)
+                .assertThat()
+                .statusCode(SC_OK)
+                .and()
+                .body("user.name", equalTo(newName));
+    }
+
     @After
-    public void tearDown(){
+    public void tearDown() {
         String token = userSteps.login(user)
-                .extract().body().path("accessToken");
+                .extract().body().path(TOKEN);
         user.setAccessToken(token);
 
         if (user.getAccessToken() != null) {

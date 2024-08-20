@@ -7,7 +7,7 @@ import static config.RestConfig.HOST;
 
 public abstract class AbstractTest {
     @Before
-    public void setUpRestAssured(){
+    public void setUpRestAssured() {
         RestAssured.requestSpecification = new RequestSpecBuilder()
                 .setContentType(ContentType.JSON)
                 .setBaseUri(HOST)

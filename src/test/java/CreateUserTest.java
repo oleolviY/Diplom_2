@@ -6,15 +6,16 @@ import org.junit.Before;
 import org.junit.Test;
 import steps.UserSteps;
 
+import static config.Constants.TOKEN;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.hamcrest.Matchers.*;
 
-public class CreateUserTests extends AbstractTest{
+public class CreateUserTest extends AbstractTest {
     private UserSteps userSteps = new UserSteps();
     private User user;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         user = new User();
         user.setName(RandomStringUtils.randomAlphabetic(10));
         user.setPassword(RandomStringUtils.randomAlphabetic(10));
@@ -23,7 +24,7 @@ public class CreateUserTests extends AbstractTest{
 
     @Test
     @DisplayName("Создание уникального пользователя")
-    public void createUser(){
+    public void createUser() {
         userSteps
                 .createUser(user)
                 .assertThat()
@@ -33,9 +34,9 @@ public class CreateUserTests extends AbstractTest{
     }
 
     @After
-    public void tearDown(){
+    public void tearDown() {
         String token = userSteps.login(user)
-                .extract().body().path("accessToken");
+                .extract().body().path(TOKEN);
         user.setAccessToken(token);
 
         if (user.getAccessToken() != null) {

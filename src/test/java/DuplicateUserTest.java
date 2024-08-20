@@ -6,15 +6,16 @@ import org.junit.Before;
 import org.junit.Test;
 import steps.UserSteps;
 
+import static config.Constants.TOKEN;
 import static org.apache.http.HttpStatus.SC_FORBIDDEN;
 import static org.hamcrest.Matchers.equalTo;
 
-public class CreateUserNegativeTests extends AbstractTest{
+public class DuplicateUserTest extends AbstractTest {
     private UserSteps userSteps = new UserSteps();
     private User user;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         user = new User();
         user.setName(RandomStringUtils.randomAlphabetic(10));
         user.setPassword(RandomStringUtils.randomAlphabetic(10));
@@ -23,7 +24,7 @@ public class CreateUserNegativeTests extends AbstractTest{
 
     @Test
     @DisplayName("Создание пользователя, который уже зарегистрирован")
-    public void duplicateUser(){
+    public void duplicateUser() {
         userSteps
                 .createUser(user);
 
@@ -36,9 +37,9 @@ public class CreateUserNegativeTests extends AbstractTest{
     }
 
     @After
-    public void tearDown(){
+    public void tearDown() {
         String token = userSteps.login(user)
-                .extract().body().path("accessToken");
+                .extract().body().path(TOKEN);
         user.setAccessToken(token);
 
         if (user.getAccessToken() != null) {
