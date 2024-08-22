@@ -8,7 +8,6 @@ import steps.UserSteps;
 
 import static config.Constants.NOT_AUTH;
 import static config.Constants.TOKEN;
-import static org.apache.http.HttpStatus.SC_OK;
 import static org.apache.http.HttpStatus.SC_UNAUTHORIZED;
 import static org.hamcrest.Matchers.equalTo;
 
